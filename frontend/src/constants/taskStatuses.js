@@ -5,9 +5,9 @@ export const TASK_STATUS = {
 }
 
 export const TASK_COLUMNS = [
-  { key: TASK_STATUS.TODO, title: 'Todo', color: '#64748b' },
-  { key: TASK_STATUS.IN_PROGRESS, title: 'In Progress', color: '#2563eb' },
-  { key: TASK_STATUS.COMPLETED, title: 'Completed', color: '#16a34a' },
+  { key: TASK_STATUS.TODO, titleKey: 'todo', color: '#64748b' },
+  { key: TASK_STATUS.IN_PROGRESS, titleKey: 'inProgress', color: '#2563eb' },
+  { key: TASK_STATUS.COMPLETED, titleKey: 'completed', color: '#16a34a' },
 ]
 
 export const NEXT_STATUS = {

@@ -1,20 +1,25 @@
 import { useMemo } from 'react'
 import { TASK_COLUMNS, TASK_STATUS } from '../constants/taskStatuses'
+import { useLanguage } from '../contexts/LanguageContext'
 import { useTasks } from '../contexts/TaskContext'
 import { formatDate } from '../utils/date'
+import { translateError } from '../utils/errors'
 
-function getStatusTitle(status) {
-  return TASK_COLUMNS.find((column) => column.key === status)?.title ?? status
+function getStatusTitle(status, t) {
+  const column = TASK_COLUMNS.find((currentColumn) => currentColumn.key === status)
+
+  return column ? t(column.titleKey) : status
 }
 
 export function PeoplePage() {
   const { tasks, isLoading, error } = useTasks()
+  const { language, t } = useLanguage()
 
   const people = useMemo(() => {
     const groupedTasks = new Map()
 
     for (const task of tasks) {
-      const person = task.assignedTo?.trim() || 'Unassigned'
+      const person = task.assignedTo?.trim() || t('unassigned')
       const personTasks = groupedTasks.get(person) ?? []
       personTasks.push(task)
       groupedTasks.set(person, personTasks)
@@ -40,27 +45,27 @@ export function PeoplePage() {
         }
       })
       .sort((firstPerson, secondPerson) => secondPerson.total - firstPerson.total)
-  }, [tasks])
+  }, [tasks, t])
 
   return (
     <main className="page">
       <div className="people-heading">
         <div>
-          <h2 className="page-title">People</h2>
-          <p className="page-subtitle">Tasks grouped by assignee and status.</p>
+          <h2 className="page-title">{t('peopleTitle')}</h2>
+          <p className="page-subtitle">{t('peopleSubtitle')}</p>
         </div>
         <div className="people-summary">
-          <span>{people.length} people</span>
-          <span>{tasks.length} tasks</span>
+          <span>{people.length} {t('peopleCount')}</span>
+          <span>{tasks.length} {t('taskCount')}</span>
         </div>
       </div>
 
       <div className={`state-line${error ? ' state-line--error' : ''}`}>
-        {error || (isLoading ? 'Loading people...' : '')}
+        {translateError(error, language) || (isLoading ? t('loadingPeople') : '')}
       </div>
 
       {people.length === 0 ? (
-        <div className="empty-panel">No assigned tasks yet.</div>
+        <div className="empty-panel">{t('emptyPeople')}</div>
       ) : (
         <div className="people-grid">
           {people.map((person) => (
@@ -68,12 +73,14 @@ export function PeoplePage() {
               <div className="person-panel__header">
                 <div>
                   <h3 className="person-panel__name">{person.person}</h3>
-                  <span className="person-panel__meta">{person.total} total tasks</span>
+                  <span className="person-panel__meta">
+                    {t('totalTasksPrefix')} {person.total} {t('totalTasksSuffix')}
+                  </span>
                 </div>
-                <div className="person-stats" aria-label={`${person.person} task counts`}>
-                  <span className="person-stat">{person.todo} todo</span>
-                  <span className="person-stat">{person.inProgress} active</span>
-                  <span className="person-stat">{person.completed} done</span>
+                <div className="person-stats" aria-label={`${person.person} ${t('taskCountsLabel')}`}>
+                  <span className="person-stat">{person.todo} {t('todoShort')}</span>
+                  <span className="person-stat">{person.inProgress} {t('activeShort')}</span>
+                  <span className="person-stat">{person.completed} {t('doneShort')}</span>
                 </div>
               </div>
               <div className="person-panel__tasks">
@@ -81,11 +88,11 @@ export function PeoplePage() {
                   <div className="person-task" key={task.id}>
                     <div>
                       <strong>{task.taskDescription}</strong>
-                      <span>Planned {formatDate(task.plannedDate)}</span>
+                      <span>{t('plannedPrefix')}: {formatDate(task.plannedDate)}</span>
                     </div>
                     <div className="person-task__badges">
-                      {task.isOverdue ? <span className="overdue-badge">Overdue</span> : null}
-                      <span className={`status-pill status-pill--${task.status}`}>{getStatusTitle(task.status)}</span>
+                      {task.isOverdue ? <span className="overdue-badge">{t('overdue')}</span> : null}
+                      <span className={`status-pill status-pill--${task.status}`}>{getStatusTitle(task.status, t)}</span>
                     </div>
                   </div>
                 ))}

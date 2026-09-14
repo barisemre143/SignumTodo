@@ -1,4 +1,5 @@
 import { useEffect, useState } from 'react'
+import { useLanguage } from '../../contexts/LanguageContext'
 import { toDateInputValue } from '../../utils/date'
 
 const initialFormState = {
@@ -9,6 +10,7 @@ const initialFormState = {
 
 export function TaskForm({ task, error, isSubmitting, onCancel, onSubmit }) {
   const [form, setForm] = useState(initialFormState)
+  const { t } = useLanguage()
 
   useEffect(() => {
     if (!task) {
@@ -37,7 +39,7 @@ export function TaskForm({ task, error, isSubmitting, onCancel, onSubmit }) {
       <div className="modal__body">
         {error ? <div className="form-error">{error}</div> : null}
         <div className="field field--wide">
-          <label htmlFor="taskDescription">Task description</label>
+          <label htmlFor="taskDescription">{t('taskDescription')}</label>
           <textarea
             id="taskDescription"
             className="textarea"
@@ -47,7 +49,7 @@ export function TaskForm({ task, error, isSubmitting, onCancel, onSubmit }) {
           />
         </div>
         <div className="field field--wide">
-          <label htmlFor="assignedTo">Assigned to</label>
+          <label htmlFor="assignedTo">{t('assignedTo')}</label>
           <input
             id="assignedTo"
             className="input"
@@ -57,7 +59,7 @@ export function TaskForm({ task, error, isSubmitting, onCancel, onSubmit }) {
           />
         </div>
         <div className="field">
-          <label htmlFor="plannedDate">Planned date</label>
+          <label htmlFor="plannedDate">{t('plannedDate')}</label>
           <input
             id="plannedDate"
             className="input"
@@ -70,10 +72,10 @@ export function TaskForm({ task, error, isSubmitting, onCancel, onSubmit }) {
       </div>
       <div className="modal__footer">
         <button type="button" className="button button--secondary" onClick={onCancel}>
-          Cancel
+          {t('cancel')}
         </button>
         <button type="submit" className="button button--primary" disabled={isSubmitting}>
-          {isSubmitting ? 'Saving...' : 'Save task'}
+          {isSubmitting ? t('saving') : t('saveTask')}
         </button>
       </div>
     </form>

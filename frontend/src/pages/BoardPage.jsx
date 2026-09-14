@@ -1,7 +1,9 @@
 import { useMemo, useState } from 'react'
 import { TaskBoard } from '../components/board/TaskBoard'
 import { TaskModal } from '../components/tasks/TaskModal'
+import { useLanguage } from '../contexts/LanguageContext'
 import { useTasks } from '../contexts/TaskContext'
+import { translateError } from '../utils/errors'
 
 export function BoardPage() {
   const {
@@ -16,12 +18,13 @@ export function BoardPage() {
     moveTaskForward,
     deleteTask,
   } = useTasks()
+  const { language, t } = useLanguage()
   const [modalTask, setModalTask] = useState(null)
   const [isModalOpen, setIsModalOpen] = useState(false)
   const [isSubmitting, setIsSubmitting] = useState(false)
   const [formError, setFormError] = useState('')
 
-  const visibleError = isModalOpen ? error : formError || error
+  const visibleError = isModalOpen ? translateError(error, language) : formError || translateError(error, language)
 
   const sortedTasks = useMemo(
     () =>
@@ -66,7 +69,7 @@ export function BoardPage() {
 
       closeModal()
     } catch (submitError) {
-      setFormError(submitError?.response?.data?.message ?? submitError.message)
+      setFormError(translateError(submitError, language))
     } finally {
       setIsSubmitting(false)
     }
@@ -76,7 +79,7 @@ export function BoardPage() {
     try {
       await moveTaskForward(task)
     } catch (moveError) {
-      setFormError(moveError?.response?.data?.message ?? moveError.message)
+      setFormError(translateError(moveError, language))
     }
   }
 
@@ -91,12 +94,12 @@ export function BoardPage() {
       setFormError('')
       await patchTask(task.id, { status: targetStatus })
     } catch (dropError) {
-      setFormError(dropError?.response?.data?.message ?? dropError.message)
+      setFormError(translateError(dropError, language))
     }
   }
 
   async function handleDeleteTask(task) {
-    const confirmed = window.confirm(`Delete "${task.taskDescription}"?`)
+    const confirmed = window.confirm(`${t('deleteConfirmPrefix')}${task.taskDescription}${t('deleteConfirmSuffix')}`)
 
     if (!confirmed) {
       return
@@ -105,7 +108,7 @@ export function BoardPage() {
     try {
       await deleteTask(task.id)
     } catch (deleteError) {
-      setFormError(deleteError?.response?.data?.message ?? deleteError.message)
+      setFormError(translateError(deleteError, language))
     }
   }
 
@@ -114,7 +117,7 @@ export function BoardPage() {
       <div className="toolbar">
         <div className="filters">
           <div className="field">
-            <label htmlFor="assignedToFilter">Assigned to</label>
+            <label htmlFor="assignedToFilter">{t('assignedTo')}</label>
             <input
               id="assignedToFilter"
               className="input"
@@ -125,11 +128,11 @@ export function BoardPage() {
                   assignedTo: event.target.value,
                 }))
               }
-              placeholder="Filter by person"
+              placeholder={t('filterByPerson')}
             />
           </div>
           <div className="field">
-            <label htmlFor="plannedDateFilter">Planned date</label>
+            <label htmlFor="plannedDateFilter">{t('plannedDate')}</label>
             <input
               id="plannedDateFilter"
               className="input"
@@ -148,16 +151,16 @@ export function BoardPage() {
             className="button button--secondary"
             onClick={() => setFilters({ assignedTo: '', plannedDate: '' })}
           >
-            Clear filters
+            {t('clearFilters')}
           </button>
         </div>
         <button type="button" className="button button--primary" onClick={openCreateModal}>
-          New task
+          {t('newTask')}
         </button>
       </div>
 
       <div className={`state-line${visibleError ? ' state-line--error' : ''}`}>
-        {visibleError || (isLoading ? 'Loading tasks...' : '')}
+        {visibleError || (isLoading ? t('loadingTasks') : '')}
       </div>
 
       <TaskBoard
