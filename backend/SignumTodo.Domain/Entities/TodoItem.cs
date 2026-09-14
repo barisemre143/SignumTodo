@@ -17,6 +17,10 @@ public class TodoItem
 
     public bool IsCompleted => Status == TodoItemStatus.Completed;
 
+    public bool IsOverdue =>
+        Status != TodoItemStatus.Completed &&
+        PlannedDate < DateOnly.FromDateTime(DateTime.UtcNow);
+
     public DateTime CreatedAt { get; set; } = DateTime.UtcNow;
 
     public DateTime? UpdatedAt { get; set; }

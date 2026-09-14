@@ -9,5 +9,6 @@ public sealed record TodoItemDto(
     DateOnly PlannedDate,
     TodoItemStatus Status,
     bool IsCompleted,
+    bool IsOverdue,
     DateTime CreatedAt,
     DateTime? UpdatedAt);

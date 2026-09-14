@@ -34,6 +34,7 @@ public class AppDbContext : DbContext
                 .HasMaxLength(50);
 
             entity.Ignore(todo => todo.IsCompleted);
+            entity.Ignore(todo => todo.IsOverdue);
         });
     }
 }

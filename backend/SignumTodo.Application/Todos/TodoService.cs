@@ -117,6 +117,7 @@ public sealed class TodoService : ITodoService
             todoItem.PlannedDate,
             todoItem.Status,
             todoItem.IsCompleted,
+            todoItem.IsOverdue,
             todoItem.CreatedAt,
             todoItem.UpdatedAt);
     }
