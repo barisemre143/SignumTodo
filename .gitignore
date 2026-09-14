@@ -1,0 +1,13 @@
+**/bin/
+**/obj/
+**/node_modules/
+**/.vite/
+.tools/
+.env
+.env.*
+!.env.example
+*.user
+*.suo
+.vs/
+.vscode/
+**/appsettings.Local.json
