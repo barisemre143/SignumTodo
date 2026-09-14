@@ -1,7 +1,9 @@
 using Microsoft.EntityFrameworkCore;
 using Microsoft.Extensions.DependencyInjection;
 using Npgsql;
+using SignumTodo.Application.Abstractions;
 using SignumTodo.Infrastructure.Persistence;
+using SignumTodo.Infrastructure.Repositories;
 
 namespace SignumTodo.Infrastructure;
 
@@ -23,6 +25,7 @@ public static class DependencyInjection
 
         services.AddDbContext<AppDbContext>(options =>
             options.UseNpgsql(connectionString));
+        services.AddScoped<ITodoRepository, TodoRepository>();
 
         return services;
     }

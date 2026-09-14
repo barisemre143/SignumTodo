@@ -11,7 +11,7 @@ public class TodoItem
 
     public string AssignedTo { get; set; } = string.Empty;
 
-    public DateTime PlannedDate { get; set; }
+    public DateOnly PlannedDate { get; set; }
 
     public TodoItemStatus Status { get; private set; } = TodoItemStatus.Todo;
 
@@ -20,6 +20,14 @@ public class TodoItem
     public DateTime CreatedAt { get; set; } = DateTime.UtcNow;
 
     public DateTime? UpdatedAt { get; set; }
+
+    public void UpdateDetails(string taskDescription, string assignedTo, DateOnly plannedDate)
+    {
+        TaskDescription = taskDescription;
+        AssignedTo = assignedTo;
+        PlannedDate = plannedDate;
+        UpdatedAt = DateTime.UtcNow;
+    }
 
     public void ChangeStatus(TodoItemStatus newStatus)
     {

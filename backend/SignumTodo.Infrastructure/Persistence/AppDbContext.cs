@@ -25,10 +25,13 @@ public class AppDbContext : DbContext
                 .HasMaxLength(150)
                 .IsRequired();
 
+            entity.Property(todo => todo.PlannedDate)
+                .HasColumnType("date")
+                .IsRequired();
+
             entity.Property(todo => todo.Status)
                 .HasConversion<string>()
-                .HasMaxLength(50)
-                .HasDefaultValue(TodoItemStatus.Todo);
+                .HasMaxLength(50);
 
             entity.Ignore(todo => todo.IsCompleted);
         });
