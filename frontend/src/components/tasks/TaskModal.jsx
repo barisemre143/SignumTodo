@@ -1,6 +1,6 @@
 import { TaskForm } from './TaskForm'
 
-export function TaskModal({ task, isSubmitting, onClose, onSubmit }) {
+export function TaskModal({ task, error, isSubmitting, onClose, onSubmit }) {
   return (
     <div className="modal-backdrop" role="presentation">
       <section className="modal" role="dialog" aria-modal="true" aria-labelledby="task-modal-title">
@@ -12,7 +12,13 @@ export function TaskModal({ task, isSubmitting, onClose, onSubmit }) {
             X
           </button>
         </div>
-        <TaskForm task={task} isSubmitting={isSubmitting} onCancel={onClose} onSubmit={onSubmit} />
+        <TaskForm
+          task={task}
+          error={error}
+          isSubmitting={isSubmitting}
+          onCancel={onClose}
+          onSubmit={onSubmit}
+        />
       </section>
     </div>
   )

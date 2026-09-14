@@ -21,7 +21,7 @@ export function BoardPage() {
   const [isSubmitting, setIsSubmitting] = useState(false)
   const [formError, setFormError] = useState('')
 
-  const visibleError = formError || error
+  const visibleError = isModalOpen ? error : formError || error
 
   const sortedTasks = useMemo(
     () =>
@@ -171,6 +171,7 @@ export function BoardPage() {
       {isModalOpen ? (
         <TaskModal
           task={modalTask}
+          error={formError}
           isSubmitting={isSubmitting}
           onClose={closeModal}
           onSubmit={handleSubmit}

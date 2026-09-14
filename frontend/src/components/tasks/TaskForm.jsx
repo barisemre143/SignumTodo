@@ -7,7 +7,7 @@ const initialFormState = {
   plannedDate: '',
 }
 
-export function TaskForm({ task, isSubmitting, onCancel, onSubmit }) {
+export function TaskForm({ task, error, isSubmitting, onCancel, onSubmit }) {
   const [form, setForm] = useState(initialFormState)
 
   useEffect(() => {
@@ -35,6 +35,7 @@ export function TaskForm({ task, isSubmitting, onCancel, onSubmit }) {
   return (
     <form onSubmit={handleSubmit}>
       <div className="modal__body">
+        {error ? <div className="form-error">{error}</div> : null}
         <div className="field field--wide">
           <label htmlFor="taskDescription">Task description</label>
           <textarea
