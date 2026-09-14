@@ -23,9 +23,18 @@ public class TodoItem
 
     public void ChangeStatus(TodoItemStatus newStatus)
     {
-        if (Status == TodoItemStatus.Todo && newStatus == TodoItemStatus.Completed)
+        if (Status == newStatus)
         {
-            throw new DomainException("A task cannot move directly from todo to completed.");
+            return;
+        }
+
+        var isValidTransition =
+            Status == TodoItemStatus.Todo && newStatus == TodoItemStatus.InProgress ||
+            Status == TodoItemStatus.InProgress && newStatus == TodoItemStatus.Completed;
+
+        if (!isValidTransition)
+        {
+            throw new DomainException($"Task status cannot change from {Status} to {newStatus}.");
         }
 
         Status = newStatus;
