@@ -66,7 +66,7 @@ Update `backend/SignumTodo.Api/.env`:
 DB_HOST=localhost
 DB_PORT=5432
 DB_NAME=signumtodo_db
-DB_USERNAME=postgres
+DB_USERNAME=your_db_name_here
 DB_PASSWORD=your_password_here
 ```
 
