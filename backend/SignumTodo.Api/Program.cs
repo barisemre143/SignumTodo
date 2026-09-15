@@ -1,5 +1,6 @@
 using System.Text.Json.Serialization;
 using DotNetEnv;
+using SignumTodo.Api.Extensions;
 using SignumTodo.Application;
 using SignumTodo.Infrastructure;
 
@@ -33,18 +34,6 @@ builder.Services.AddOpenApi();
 
 var app = builder.Build();
 
-// Configure the HTTP request pipeline.
-if (app.Environment.IsDevelopment())
-{
-    app.MapOpenApi();
-}
-
-app.UseHttpsRedirection();
-
-app.UseCors("Frontend");
-
-app.UseAuthorization();
-
-app.MapControllers();
+app.UseApiPipeline();
 
 app.Run();
